@@ -16,6 +16,32 @@
     birdY = pipeGap = 200;
     canvasSize = pipeX = 400;
     c.onclick = () => (birdDY = 9) ;
+    function submitScore(score) {
+      confirm('Do you want to send your score ?'){
+            let userEmail = localStorage.sharcadEmail
+        ? JSON.parse(localStorage.sharcadEmail)
+        : prompt("Enter your shaRcade email to send your score !");
+        if (userEmail) {
+          localStorage.setItem("sharcadEmail", JSON.stringify(userEmail));
+      const data = {
+      "score_token" : {
+      "hi_score" : score,
+      "api_key" : "Yi0aZcq5OGkdt1SV",
+      "user_email" : userEmail
+      }
+      };
+
+      fetch('https://sharcade-api.herokuapp.com/sharcade_api', {
+      method: 'post',
+      headers: {
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+      })
+      .catch((error) => console.log(error));
+      }
+      }}
+
     setInterval(() => {
       context.fillStyle = "skyblue";
       context.fillRect(0,0,canvasSize,canvasSize); // Draw sky
@@ -29,11 +55,11 @@
       context.fillRect(pipeX, topPipeBottomY + pipeGap, pipeWidth, canvasSize); // Draw bottom pipe
       context.fillStyle = "black";
       context.fillText(score++, 9, 25); // Increase and draw score
-      bestScore = bestScore < score ? score : bestScore; // New best score?
+      bestScore = bestScore < score ? score : bestScore;
       context.fillText(`Best: ${bestScore}`, 9, 50); // Draw best score
       (((birdY < topPipeBottomY || birdY > topPipeBottomY + pipeGap) && pipeX < birdSize * (524/374))// Bird hit pipe?
        || birdY > canvasSize) && // Bird falls off screen
-      ((birdDY = 0), (birdY = 200), (pipeX = canvasSize), (score = 0)); // Bird died
+      (submitScore(bestScore), (birdDY = 0), (birdY = 200), (pipeX = canvasSize), (score = 0)); // Bird died
     }, interval)
   </script>
 </body>
