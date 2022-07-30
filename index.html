@@ -17,7 +17,7 @@
     canvasSize = pipeX = 400;
     c.onclick = () => (birdDY = 9) ;
     function submitScore(score) {
-      confirm('Do you want to send your score ?'){
+      if (confirm('Do you want to send your score ?')) {
             let userEmail = localStorage.sharcadEmail
         ? JSON.parse(localStorage.sharcadEmail)
         : prompt("Enter your shaRcade email to send your score !");
@@ -40,6 +40,9 @@
       })
       .catch((error) => console.log(error));
       }
+      }
+      else {
+        return
       }}
 
     setInterval(() => {
@@ -59,7 +62,7 @@
       context.fillText(`Best: ${bestScore}`, 9, 50); // Draw best score
       (((birdY < topPipeBottomY || birdY > topPipeBottomY + pipeGap) && pipeX < birdSize * (524/374))// Bird hit pipe?
        || birdY > canvasSize) && // Bird falls off screen
-      (submitScore(bestScore), (birdDY = 0), (birdY = 200), (pipeX = canvasSize), (score = 0)); // Bird died
+      (submitScore(score), (birdDY = 0), (birdY = 200), (pipeX = canvasSize), (score = 0)); // Bird died
     }, interval)
   </script>
 </body>
